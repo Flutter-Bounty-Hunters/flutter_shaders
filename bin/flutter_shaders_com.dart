@@ -7,6 +7,7 @@ Future<void> main(List<String> arguments) async {
     // you can copy an "images" directory from the source set to build set:
     ..pick(DirectoryPicker.parse("images"))
     ..pick(ExtensionPicker("mp4"))
+    ..pick(ExtensionPicker("png"))
     // All 3rd party behavior is added through plugins, even the behavior
     // shipped with Static Shock.
     ..plugin(const MarkdownPlugin())

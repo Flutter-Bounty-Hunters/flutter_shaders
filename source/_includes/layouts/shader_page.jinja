@@ -40,17 +40,27 @@
   <script>hljs.highlightAll();</script>
 </head>
 
-<body>
-<main>
-  <video width="500" height="400" autoplay loop muted>
-    <source type="video/mp4" src="ripple.mp4">
-  </video>
-  <h1>{{ shader.title }}</h1>
-  <p>{{ shader.description }}</p>
+<body class="bg-[#333333]">
+  <header class="py-[128px] flex flex-col justify-center items-center bg-[#FFFFFF] text-[#444444]">
+    <div class="absolute top-0 left-0 w-full h-[48px] flex justify-center items-center">
+      <a href="/" class="text-[#444444] text-sm font-bold uppercase">Flutter Shaders</a>
+    </div>
 
-  <div id="shaderCode">
-  {{ content }}
-  </div>
-</main>
+    <img src="{{ shader.screenshot }}" class="max-w-[400px]">
+    <h1 class="mt-8 text-4xl font-bold uppercase">{{ shader.title }}</h1>
+  </header>
+  <main class="ml-[auto] mr-[auto] max-w-[800px] py-[72px] px-[48px] flex flex-col items-center text-[#AAAAAA]">
+    <p class="mb-[72px] max-w-[500px] text-2xl font-bold text-center">{{ shader.description }}</p>
+
+    <video width="500" height="400" autoplay loop muted class="rounded-md">
+      <source type="video/mp4" src="{{ shader.video }}">
+    </video>
+
+    <p class="mt-[24px] mb-[72px] max-w-[500px]">Use the code below to add this shader to a Flutter app. If you’re not sure what to do with the provided code, check out our <a href="/usage-guide">usage guide</a>, or learn <a href="/how-shaders-work">how shaders works</a>.</p>
+
+    <div id="shaderCode" class="w-[100%]">
+    {{ content }}
+    </div>
+  </main>
 </body>
 </html>

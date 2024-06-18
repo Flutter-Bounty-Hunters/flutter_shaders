@@ -1,9 +1,10 @@
 ---
 description: A shader that ripples like liquid.
 shader:
- title: Ripple Shader
- source: ./ripple.frag
- description: A fragment shader that gives the appearance of a radiating ripple about the current mouse/touch position.
+ title: Water Ripple
+ description: A water ripple that emanates from the location of a user's tap.
+ screenshot: ripple.png
+ video: ripple.mp4
 ---
 ```glsl
 /*
