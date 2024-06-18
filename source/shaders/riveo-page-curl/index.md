@@ -1,10 +1,10 @@
 ---
 description: A shader that uses projection to show a 3D-like page curling.
 shader:
- title: Riveo Page Curl
- description: A 3D-like curling effect that follows the pointer.
- screenshot: riveo_page_curl.png
- video: riveo_page_curl.mp4
+  title: Riveo Page Curl
+  description: A 3D-like curling effect that follows the pointer.
+  screenshot: riveo_page_curl.png
+  video: riveo_page_curl.mp4
 ---
 ```glsl
 // Ported from [@wcandillon](https://github.com/wcandillon) skia shader.
