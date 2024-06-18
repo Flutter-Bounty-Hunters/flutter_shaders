@@ -1,10 +1,10 @@
 ---
 description: A shader that uses projection to show a 3D-like page curling.
 shader:
- title: Riveo Page Curl
- description: A 3D-like curling effect that follows the pointer.
- screenshot: riveo_page_curl.png
- video: riveo_page_curl.mp4
+  title: Riveo Page Curl
+  description: A 3D-like curling effect that follows the pointer.
+  screenshot: riveo_page_curl.png
+  video: riveo_page_curl.mp4
 ---
 ```glsl
 // Ported from [@wcandillon](https://github.com/wcandillon) skia shader.
@@ -79,87 +79,62 @@ bool inRect(vec2 p, vec4 rct) {
 
 out vec4 fragColor;
 
-float hash(float n) {
-    return fract(sin(n) * 753.5453123);
-}
-
-float noise(vec2 x) {
-    vec2 p = floor(x);
-    vec2 f = fract(x);
-    f = f * f * (3.0 - 2.0 * f);
-
-    float n = p.x + p.y * 157.0;
-    return mix(
-    mix(hash(n + 0.0), hash(n + 1.0), f.x),
-    mix(hash(n + 157.0), hash(n + 158.0), f.x),
-    f.y
-    );
-}
-
-float fbm(vec2 p, vec3 a) {
-    float v = 0.0;
-    v += noise(p * a.x) * 0.50;
-    v += noise(p * a.y) * 1.50;
-    v += noise(p * a.z) * 0.125 * 0.1;
-    return v;
-}
-
-vec3 drawLines(vec2 uv, vec3 fbmOffset, vec3 color1, vec3 color0, vec3 color1_1, vec3 color2, vec3 color3, float secs) {
-    float timeVal = secs * 0.1;
-    vec3 finalColor = vec3(0.0);
-
-    for (int i = 0; i < 4; ++i) {
-        float indexAsFloat = float(i);
-        float amp = 80.0 + (indexAsFloat * 0.0);
-        float period = 2.0 + (indexAsFloat + 2.0);
-        float thickness = mix(0.4, 0.2, noise(uv * 2.0));
-
-        float t = abs(1.0 / (sin(uv.y + fbm(uv + timeVal * period, fbmOffset)) * amp) * thickness);
-        if (i == 0) finalColor += t * color0;
-        if (i == 1) finalColor += t * color1_1;
-        if (i == 2) finalColor += t * color2;
-        if (i == 3) finalColor += t * color3;
-    }
-
-    for (int i = 0; i < 4; ++i) {
-        float indexAsFloat = float(i);
-        float amp = 40.0 + (indexAsFloat * 5.0);
-        float period = 9.0 + (indexAsFloat + 2.0);
-        float thickness = mix(0.1, 0.1, noise(uv * 12.0));
-
-        float t = abs(1.0 / (sin(uv.y + fbm(uv + timeVal * period, fbmOffset)) * amp) * thickness);
-        if (i == 0) finalColor += t * color0 * color1;
-        if (i == 1) finalColor += t * color1_1 * color1;
-        if (i == 2) finalColor += t * color2 * color1;
-        if (i == 3) finalColor += t * color3 * color1;
-    }
-
-    return finalColor;
-}
-
 void main() {
-    vec2 fragCoord = FlutterFragCoord().xy;
-    vec2 uv = (fragCoord.xy / iResolution.xy) * 2.0 - 1.0;
+    vec2 xy = FlutterFragCoord().xy;
+    vec2 center = resolution * 0.5;
 
-    uv *= 1.0 + 0.5;
+    float dx = origin - pointer;
+    float x = container.z - dx;
 
-    vec3 lineColor1 = vec3(1.0, 0.0, 0.5);
-    vec3 lineColor2 = vec3(0.3, 0.5, 1.5);
-    float spread = abs(tapValue);
-    vec3 finalColor = vec3(0.0);
+    float d = xy.x - x;
 
-    vec3 color0 = vec3(0.7, 0.05, 1.0);
-    vec3 color1_1 = vec3(1.0, 0.19, 0.0);
-    vec3 color2 = vec3(0.0, 1.0, 0.3);
-    vec3 color3 = vec3(0.0, 0.38, 1.0);
+    // When the fragment is outside of the radius
+    if (d > r) {
+        fragColor = TRANSPARENT;
 
-    float t = sin(iTime) * 0.5 + 0.5;
-    float pulse = mix(0.006, 0.009, t);
+        // Adjust the alpha value based on distance outside the radius
+        if (inRect(xy, container)) {
+            fragColor.a = mix(0.5, 0.0, (d - r) / r);
+        }
+    }
+    // When the fragment is within the transition zone of the radius
+    else if (d > 0.0) {
+        float theta = asin(d / r);
+        float d1 = theta * r;
+        float d2 = (PI - theta) * r;
+        const float HALF_PI = PI / 2.0;
 
-    finalColor = drawLines(uv, vec3(65.2, 40.0, 4.0), lineColor1, color0, color1_1, color2, color3, iTime * 0.1) * pulse;
-    finalColor += drawLines(uv, vec3(5.0 * spread / 2.0, 2.1 * spread, 1.0), lineColor2, color0, color1_1, color2, color3, iTime);
+        vec2 s = vec2(1.0 + (1.0 - sin(HALF_PI + theta)) * 0.1);
+        mat3 transform = scale(s, center);
+        vec2 uv = project(xy, transform);
+        vec2 p1 = vec2(x + d1, uv.y);
 
-    fragColor = vec4(finalColor, 1.0);
+        s = vec2(1.1 + sin(HALF_PI + theta) * 0.1);
+        transform = scale(s, center);
+        uv = project(xy, transform);
+        vec2 p2 = vec2(x + d2, uv.y);
+
+        if (inRect(p2, container)) {
+            fragColor = texture(image, p2 / resolution);
+        } else if (inRect(p1, container)) {
+            fragColor = texture(image, p1 / resolution);
+            fragColor.rgb *= pow(clamp((r - d) / r, 0.0, 1.0), 0.2);
+        } else if (inRect(xy, container)) {
+            fragColor = vec4(0.0, 0.0, 0.0, 0.5);
+        }
+    }
+    // When the fragment is inside the radius
+    else {
+        vec2 s = vec2(1.2);
+        mat3 transform = scale(s, center);
+        vec2 uv = project(xy, transform);
+
+        vec2 p = vec2(x + abs(d) + PI * r, uv.y);
+        if (inRect(p, container)) {
+            fragColor = texture(image, p / resolution);
+        } else {
+            fragColor = texture(image, xy / resolution);
+        }
+    }
 }
-
 ```
