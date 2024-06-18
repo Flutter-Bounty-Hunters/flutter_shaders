@@ -1,10 +1,10 @@
 ---
 description: A shader that uses noise generation to paint random lines.
 shader:
- title: Chaos Lines
- description: This shader generates random lines using noise algorithms. Lines appear when `tapValue` is updated, peaking at 1.0 and hidden at 0.0.
- screenshot: chaos.png
- video: chaos.mp4
+  title: Chaos Lines
+  description: This shader generates random lines using noise algorithms. Lines appear when `tapValue` is updated, peaking at 1.0 and hidden at 0.0.
+  screenshot: chaos.png
+  video: chaos.mp4
 ---
 ```glsl
 // Ported from [@realvjy](https://gist.github.com/realvjy/803f8862adb02a094f96fd07e00917ee) metal shader.
