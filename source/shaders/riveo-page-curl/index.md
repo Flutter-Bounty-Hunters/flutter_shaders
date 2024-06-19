@@ -5,6 +5,8 @@ shader:
   description: A 3D-like curling effect that follows the pointer.
   screenshot: riveo_page_curl.png
   video: riveo_page_curl.mp4
+# For the moment we need to record the path to this directory until Static Shock provides this
+directory: shaders/riveo-page-curl/
 ---
 ```glsl
 // Ported from [@wcandillon](https://github.com/wcandillon) skia shader.

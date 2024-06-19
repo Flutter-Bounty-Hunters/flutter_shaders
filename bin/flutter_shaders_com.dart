@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:static_shock/static_shock.dart';
 
 Future<void> main(List<String> arguments) async {
@@ -17,7 +19,15 @@ Future<void> main(List<String> arguments) async {
     ..plugin(const TailwindPlugin(
       input: "source/styles/tailwind.css",
       output: "build/styles/tailwind.css",
-    ));
+    ))
+    ..plugin(
+      GitHubContributorsPlugin(
+        authToken: Platform.environment["github_doc_website_token"],
+        repositories: {
+          GitHubRepository(organization: "flutter-bounty-hunters", name: "flutter_shaders"),
+        },
+      ),
+    );
 
   // Generate the static website.
   await staticShock.generateSite();

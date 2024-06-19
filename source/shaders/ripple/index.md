@@ -5,6 +5,8 @@ shader:
  description: A water ripple that emanates from the location of a user's tap.
  screenshot: ripple.png
  video: ripple.mp4
+# For the moment we need to record the path to this directory until Static Shock provides this
+directory: shaders/ripple/
 ---
 ```glsl
 /*

@@ -36,24 +36,76 @@ description: An inventory of shaders for Flutter developers to explore.
     <meta name="twitter:image" content="{{ homepage_url }}/images/social.png" />
 
     <link href="/styles/tailwind.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   </head>
 
-  <body class="bg-[#333333]">
+  <body class="bg-[#27b6d6]">
     <header  class="py-[128px] flex flex-col justify-center items-center bg-[#FFFFFF] text-[#444444]">
       <div class="max-w-[800px] flex flex-row items-center">
         <div class="flex-1">
           <h1 class="mb-[8px] text-5xl font-bold uppercase">Flutter Shaders</h1>
-          <p class="text-3xl text-[#888888] font-bold">Shaders for every user, on every platform</p>
+          <p class="mb-[24px] text-3xl text-[#27b6d6] font-bold">Shaders for every user, on every platform</p>
+          <img src="/images/platform-icons.png" class="max-w-[275px]">
         </div>
-        <div class="ml-[48px] w-[250px] h-[250px] bg-[#222222]">
-          <!-- featured shader screenshot -->
+        <div class="ml-[48px] w-[250px] h-[250px]">
+          <img src="{{ featured_shader_screenshot }}" class="w-full rounded-xl">
         </div>
       </div>
 
       <a href="/how-shaders-work" class="mt-[72px] text-[#444444] font-bold uppercase no-underline">Learn how shaders work</a>
     </header>
-    <main>
-      <h1>TODO</h1>
+    <main class="py-[96px] text-[#FFFFFFAA]">
+      <div class="max-w-[800px] ml-[auto] mr-[auto] mb-[128px]">
+        <div class="grid grid-cols-3 gap-[48px]">
+          {% for page in pages.byTag("shader") %}
+          <a href="{{ page.data["url"] }}" class="no-underline">
+            <div class="p-[8px] border border-[#FFFFFF10] hover:border-[#FFFFFF33] hover:bg-[#FFFFFF04] rounded-lg">
+              <img
+                src="{{ page.data["directory"] }}{{ page.data["shader"]["screenshot"] }}"
+                class="w-full max-w-[250px] rounded-md"
+                >
+              <p class="mt-[12px] mb-[12px] text-center">{{ page.data["shader"]["title"] }}</p>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <h2 class="text-center font-bold uppercase text-xl text-[#FFFFFF]">Contributors</h2>
+      <ol class="mt-[32px] mb-[128px] flex flex-row justify-center list-none text-center">
+        {% set contributors = github["flutter-bounty-hunters"].flutter_shaders %}
+        {% set contributorCount = 15 %}
+        {% for contributor in contributors|take(contributorCount) %}
+        <li class="inline-block mr-[16px] mb-[16px]">
+          <a
+              href="{{ contributor.userUrl }}"
+              target="_blank"
+              title="{{ contributor.userId }}"
+              class="inline-block w-[64px] h-[64px] rounded-full bg-cover bg-no-repeat bg-center"
+              style="background-image: url('{{ contributor.avatarUrl }}');"></a>
+        </li>
+        {% endfor %}
+
+        {% if contributors|length > contributorCount %}
+        <li class="inline-block">
+          <div class="inline-block w-[64px] h-[64px] rounded-full bg-[rgba(255, 255, 255, 0.05)] leading-[64px] text-center align-[middle]">
+            +{{  contributors|length - contributorCount  }}
+          </div>
+        </li>
+        {% endif %}
+      </ol>
+
+      <div class="mb-[128px] text-center">
+        <a
+            href="https://github.com/sponsors/matthew-carroll"
+            target="_blank"
+            title="matthew-carroll"
+            class="inline-block w-[64px] h-[64px] rounded-full bg-cover bg-no-repeat bg-center"
+            style="background-image: url('https://avatars.githubusercontent.com/u/7259036?v=4');"></a>
+        <p class="mt-[8px] mb-[24px] text-sm">Made with ❤️ by <a href="https://superdeclarative.com" target="_blank" class="text-[#FFFF00]">SuperDeclarative!</a></p>
+        <a href="https://github.com/sponsors/matthew-carroll" target="_blank" class="px-[12px] py-[8px] bg-sky-600 hover:bg-sky-400 rounded-lg text-[#FFFFFFDD] hover:text-[#FFFFFFFF] no-underline text-sm"><i class="fa-brands fa-github"></i> Sponsor on GitHub</a>
+      </div>
     </main>
   </body>
 </html>
