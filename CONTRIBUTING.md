@@ -12,10 +12,10 @@ purposes. If you'd like to share artistic shaders, or game shaders, please try h
 By contributing a shader to this website, you're applying this repository's license to the shader
 code.
 
-Did you write the shader code yourself? If so, make sure you're OK with applying the terms in [LICENSE].
+Did you write the shader code yourself? If so, make sure you're OK with applying the terms in [LICENSE](LICENSE).
 
 Did someone else write some or all of the shader code? Check the license on the shader code to ensure
-that you're allowed to post that code under the terms of our [LICENSE].
+that you're allowed to post that code under the terms of our [LICENSE](LICENSE).
 
 ## What You'll Need
 Here's what you'll need when contributing a shader.
@@ -57,6 +57,8 @@ Below the Frontmatter data, paste your shader code:
     ```glsl
     [INSERT CODE HERE]
     ```
+
+**The easiest way to write your `index.md` is to copy an existing file and adjust its values.**
 
 Create a new Git branch with whatever name you'd like. Then, commit your changes with a message like
 the following:
