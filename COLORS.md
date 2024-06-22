@@ -1,11 +1,10 @@
 # Colors
 
-
 ## Flutter Colors
 
 The Color Class in Flutter is a immutable 32 bit color value, with four channels. These channels are namely Alpha, Red, Green and Blue.
 
-Each channel are represented by two hexdecimal numbers, that can represent 255 different values.
+Each channel are represented by two hexadecimal numbers, that can represent 255 different values.
 
     Color(0xAARRGGBB)
 
@@ -39,12 +38,11 @@ Blue - FF represent this channel - if we convert the hexadecimal to decimal.
 
 Now from our calculations above we can conclude that Color(0xFF448AFF) can be represented as Color.fromARGB(255, 68, 138, 255).
 
-
 ## GLSL color
 
 In OpenGL Shading Language colors can be stored in floating-point vector variables. For this e use a vec4 myRGBA.
 
-The vec4 useing a array of four-component unsigned integer vector.
+The vec4 using an array of four-component unsigned integer vector.
 
     vec(r.r, g.g, b.b, a.a)
 
@@ -60,12 +58,11 @@ Ref
 https://registry.khronos.org/OpenGL/specs/gl/GLSLangSpec.4.40.pdf
 
 
-
 ## Converting for Hexadecimal color to vec4 Floating point color 
 
-Converting decimal numbers to floating-point the decimal value are deivided by 255.
+Converting decimal numbers to floating-point the decimal value are divided by 255.
 
-If we concider the Color(0xFF448AFF) can be repesented as Color.fromARGB(255, 68, 138, 255) (rom calculation above) we can deduct the following for each channel
+If we consider the Color(0xFF448AFF) can be represented as Color.fromARGB(255, 68, 138, 255) (rom calculation above) we can deduct the following for each channel
 
 Alpah  - 255 represents this channel - if we convert the decimal to floating-point.
 
@@ -86,7 +83,3 @@ Blue  - 255 represents this channel - if we convert the decimal to floating-poin
 Now from our calculations above we can conclude that Color(0xFF448AFF) can be represented as vec4(0,2667, 0,5412, 1.0, 1.0).
 
 ![Hex_GLSL_colour.png](https://github.com/Flutter-Bounty-Hunters/flutter_shaders/tree/main/source/images/Hex_GLSL_colour.png)
-
-
-
-
