@@ -1,8 +1,8 @@
 ---
-description: A shader that simulates motion blur and adds a distortion effect while scrolling to the screen.
+description: A shader that simulates motion blur and adds a distortion effect when scrolling on the screen.
 shader:
   title: Distorted Motion Blur
-  description: "This shader simulates a motion blur effect with a distortion effect while scrolling. An examplary implementation of the shader in Flutter can be found here: https://github.com/vgtle/shader_studio/tree/main."
+  description: "This shader simulates a motion blur effect with a distortion effect when scrolling. You can find an example implementation of the shader in Flutter here: https://github.com/vgtle/shader_studio/tree/main."
   screenshot: distorted-motion-blur.png
   video: distorted-motion-blur.mp4
 # For the moment we need to record the path to this directory until Static Shock provides this
