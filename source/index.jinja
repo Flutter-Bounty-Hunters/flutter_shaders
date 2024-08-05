@@ -35,14 +35,14 @@ description: An inventory of shaders for Flutter developers to explore.
   </head>
 
   <body class="bg-[#27b6d6]">
-    <header  class="py-[128px] flex flex-col justify-center items-center bg-[#FFFFFF] text-[#444444]">
-      <div class="max-w-[800px] flex flex-row items-center">
-        <div class="flex-1">
+    <header class="pt-[64px] pb-[128px] md:py-[128px] flex flex-col justify-center items-center bg-[#FFFFFF] text-[#444444]">
+      <div class="max-w-[800px] block md:flex md:flex-row items-center">
+        <div class="md:flex-1 pl-[64px] pr-[64px] pb-[48px] md:pb-0">
           <h1 class="mb-[8px] text-5xl font-bold uppercase">Flutter Shaders</h1>
           <p class="mb-[24px] text-3xl text-[#27b6d6] font-bold">Shaders for every user, on every platform</p>
           <img src="/images/platform-icons.png" class="max-w-[275px]">
         </div>
-        <div class="ml-[48px] w-[250px] h-[250px]">
+        <div class="mx-[auto] md:ml-[48px] w-[250px] h-[250px]">
           <img src="{{ featured_shader_screenshot }}" class="w-full rounded-xl">
         </div>
       </div>
@@ -51,13 +51,13 @@ description: An inventory of shaders for Flutter developers to explore.
     </header>
     <main class="py-[96px] text-[#FFFFFFAA]">
       <div class="max-w-[800px] ml-[auto] mr-[auto] mb-[128px]">
-        <div class="grid grid-cols-3 gap-[48px]">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[48px]">
           {% for page in pages.byTag("shader") %}
           <a href="{{ page.data["url"] }}" class="no-underline">
             <div class="p-[8px] border border-[#FFFFFF10] hover:border-[#FFFFFF33] hover:bg-[#FFFFFF04] rounded-lg">
               <img
                 src="{{ page.data["directory"] }}{{ page.data["shader"]["screenshot"] }}"
-                class="w-full max-w-[250px] rounded-md"
+                class="w-full ml-[auto] mr-[auto] max-w-[250px] rounded-md"
                 >
               <p class="mt-[12px] mb-[12px] text-center">{{ page.data["shader"]["title"] }}</p>
             </div>
