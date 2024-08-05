@@ -22,7 +22,7 @@
   <meta property="og:url" content="{{ homepage_url }}" />
   <meta property="og:title" content="{{ shader.title }} | Flutter Shaders" />
   <meta property="og:description" content="{{ description }}" />
-  <meta property="og:image" content="{{ homepage_url }}/images/social.png" />
+  <meta property="og:image" content="{{ homepage_url }}{{ shader.screenshot | pathRelativeToPage }}" />
   <meta property="og:type" content="website" />
 
   <!-- Twitter -->
@@ -31,7 +31,7 @@
   <meta name="twitter:url" content="{{ homepage_url }}" />
   <meta name="twitter:title" content="{{ shader.title }} | Flutter Shaders" />
   <meta name="twitter:description" content="{{ description }}" />
-  <meta name="twitter:image" content="{{ homepage_url }}/images/social.png" />
+  <meta name="twitter:image" content="{{ homepage_url }}{{ shader.screenshot | pathRelativeToPage }}" />
 
   <link href="/styles/tailwind.css" rel="stylesheet">
 
