@@ -230,7 +230,7 @@ You should see a colorful animated shader effect!
 ### Comparison Table
 
 | Approach | Use Case | Pros | Cons | 
-|----------|----------|------|------|-------------|
+|----------|----------|------|------|
 | CustomPainter + FragmentShader | Paint  from scratch using the GPU | Raw API | More complex setup | 
 | ImageFilter.shader | Apply shaders to widgets | Easy shader effects child widget | Requires Impeller | 
 | BackdropFilter + ImageFilter.shader | Shader effects on background | Easy backdrop shader effects | Requires Impeller | 
