@@ -226,14 +226,28 @@ You should see a colorful animated shader effect!
 
 ## Different Approaches to Using Shaders in Flutter
 
-### Comparison Table
+### Available Shader Approaches
 
-| Approach | Use Case | Pros | Cons | 
-|----------|----------|------|------|
-| CustomPainter + FragmentShader | Paint  from scratch using the GPU | Raw API | More complex setup | 
-| ImageFilter.shader | Apply shaders to widgets | Easy shader effects child widget | Requires Impeller | 
-| BackdropFilter + ImageFilter.shader | Shader effects on background | Easy backdrop shader effects | Requires Impeller | 
-| flutter_shaders package | Simplified shader usage - easily tranform any widget into a shader compatible image | Cleaner API, less boilerplate | Extra dependency | 
+#### 1. CustomPainter + FragmentShader
+- **Use Case**: Paint from scratch using the GPU
+- **Pros**: Direct access to raw shader API
+- **Cons**: More complex setup and boilerplate code
+
+#### 2. ImageFiltered + ImageFilter.shader
+- **Use Case**: Apply shader effects to child widgets
+- **Pros**: Easy to apply shader effects to any widget
+- **Cons**: Requires Impeller renderer; cannot control the first two uniforms (vec2 for texture size and sampler2D) as they are set by the Flutter engine
+
+#### 3. BackdropFilter + ImageFilter.shader
+- **Use Case**: Apply shader effects to background content
+- **Pros**: Easy backdrop shader effects
+- **Cons**: Requires Impeller renderer;cannot control the first two uniforms (vec2 for texture size and sampler2D) as they are set by the Flutter engine
+
+#### 4. flutter_shaders Package
+- **Use Case**: Simplified shader usage - easily transform any widget into a shader-compatible image
+- **Pros**: Less boilerplate code; full control over all unifroms.
+- **Cons**: Requires an external dependency; Can't integrate with BackdropFilter widget
+
 
 ### Method 1: Using flutter_shaders Package (Recommended)
 
