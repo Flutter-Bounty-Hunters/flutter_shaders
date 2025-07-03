@@ -273,6 +273,7 @@ class ShaderDemo extends StatelessWidget {
           child: Container(
             width: 300,
             height: 300,
+            clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
             ),
