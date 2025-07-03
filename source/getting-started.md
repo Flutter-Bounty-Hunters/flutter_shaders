@@ -1,7 +1,6 @@
 ---
 title: Getting Started with Flutter Shaders
 description: Learn how to create stunning visual effects and performant graphics directly in your Flutter applications with this comprehensive guide.
-layout: layouts/base.jinja
 ---
 
 # Getting Started with Flutter Shaders
