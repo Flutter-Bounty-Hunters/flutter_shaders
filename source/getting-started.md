@@ -249,6 +249,37 @@ You should see a colorful animated shader effect!
 - **Cons**: Requires an external dependency; Can't integrate with BackdropFilter widget
 
 
+### Key Differences: ImageFilter.shader vs. flutter_shaders
+
+**ImageFilter.shader** (Native Flutter API):
+
+*   **Integration**: Built directly into the Flutter framework (`dart:ui`).
+*   **Rendering Backend**: **Requires the Impeller rendering engine.** It will not work with other backends.
+*   **BackdropFilter**: **Supports `BackdropFilter`**, allowing you to apply shader effects to the content behind a widget.
+*   **API Flexibility**: Operates on a "convention over configuration" model. It simplifies the process by automatically providing and managing core uniforms (like the input texture), but this reduces flexibility as you have less control over the shader's direct inputs.
+*   **Dependencies**: None, as it's part of the Flutter SDK.
+
+**flutter_shaders** (Third-party Package):
+
+*   **Integration**: A community-created package that needs to be added as a dependency.
+*   **Rendering Backend**: **Backend-agnostic**, making it compatible with various rendering backends, not just Impeller.
+*   **BackdropFilter**: **Does not directly support `BackdropFilter`**. Its effects are generally limited to the widgets it's applied to.
+*   **API Flexibility**: Provides more direct control over the `FragmentShader` object. You have full responsibility for declaring and managing all uniforms, which offers maximum flexibility and power at the cost of potentially more boilerplate code.
+*   **Dependencies**: Requires adding the `flutter_shaders` package to your `pubspec.yaml`.
+
+### When to use which?
+
+*   Use **ImageFilter.shader** when you:
+    *   Need to apply shader effects as a `BackdropFilter`.
+    *   Are targeting platforms where Impeller is guaranteed.
+    *   Want to avoid external dependencies.
+
+*   Use the **flutter_shaders** package when you:
+    *   Need a solution that works across different rendering backends.
+    *   Require fine-grained control over all shader uniforms for complex or unconventional effects.
+    *   Are creating effects that don't require `BackdropFilter`.
+
+
 ### Method 1: Using flutter_shaders Package (Recommended)
 
 For easier shader management, you can use the flutter_shaders package:
