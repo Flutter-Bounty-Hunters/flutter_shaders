@@ -573,6 +573,8 @@ class _BackdropShaderDemoState extends State<BackdropShaderDemo>
 }
 ```
 
+**Important Note**: BackdropFilter is the primary way to apply shaders to background layers in Flutter. It uses Flutter's built-in backdrop layer system that captures and processes content behind widgets. While flutter_shaders can achieve similar visual effects in some cases through snapshot-based approaches, BackdropFilter's integration with the rendering pipeline makes it the most reliable and agnostic way of applying shaders to background content.
+
 
 ## Understanding Shader Uniforms
 
