@@ -122,19 +122,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const ShaderDemo(),
+      home: const AnimatedColorsDemo(),
     );
   }
 }
 
-class ShaderDemo extends StatefulWidget {
-  const ShaderDemo({super.key});
+class AnimatedColorsDemo extends StatefulWidget {
+  const AnimatedColorsDemo({super.key});
 
   @override
-  State<ShaderDemo> createState() => _ShaderDemoState();
+  State<AnimatedColorsDemo> createState() => _AnimatedColorsDemoState();
 }
 
-class _ShaderDemoState extends State<ShaderDemo> 
+class _AnimatedColorsDemoState extends State<AnimatedColorsDemo>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   ui.FragmentShader? _shader;
@@ -151,7 +151,8 @@ class _ShaderDemoState extends State<ShaderDemo>
 
   Future<void> _loadShader() async {
     final program = await ui.FragmentProgram.fromAsset(
-        'assets/shaders/animated_colors.frag');
+      'assets/shaders/animated_colors.frag',
+    );
     setState(() {
       _shader = program.fragmentShader();
     });
@@ -160,29 +161,22 @@ class _ShaderDemoState extends State<ShaderDemo>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Flutter Shader Demo'),
-      ),
+      backgroundColor: Colors.black,
       body: Center(
-        child: Container(
-          width: 300,
-          height: 300,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: _shader == null
-              ? const Center(child: CircularProgressIndicator())
-              : AnimatedBuilder(
-                  animation: _controller,
-                  builder: (context, child) {
-                    return CustomPaint(
-                      painter: ShaderPainter(_shader!, _controller.value),
-                      size: const Size(300, 300),
-                    );
-                  },
-                ),
-        ),
+        child: _shader == null
+            ? const CircularProgressIndicator(color: Colors.white)
+            : AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  return CustomPaint(
+                    painter: AnimatedColorsPainter(_shader!, _controller.value),
+                    size: Size(
+                      MediaQuery.of(context).size.width,
+                      MediaQuery.of(context).size.height,
+                    ),
+                  );
+                },
+              ),
       ),
     );
   }
@@ -194,18 +188,18 @@ class _ShaderDemoState extends State<ShaderDemo>
   }
 }
 
-class ShaderPainter extends CustomPainter {
+class AnimatedColorsPainter extends CustomPainter {
   final ui.FragmentShader shader;
   final double time;
 
-  ShaderPainter(this.shader, this.time);
+  AnimatedColorsPainter(this.shader, this.time);
 
   @override
   void paint(Canvas canvas, Size size) {
     // Set uniforms
-    shader.setFloat(0, size.width);  // iResolution.x
+    shader.setFloat(0, size.width); // iResolution.x
     shader.setFloat(1, size.height); // iResolution.y
-    shader.setFloat(2, time * 2);    // iTime
+    shader.setFloat(2, time * 2); // iTime
 
     final paint = Paint()..shader = shader;
     canvas.drawRect(Offset.zero & size, paint);
@@ -223,6 +217,8 @@ flutter run
 ```
 
 You should see a colorful animated shader effect!
+
+![Animated Colors Effect](getting-started/animated_colors.gif)
 
 ## Different Approaches to Using Shaders in Flutter
 
@@ -336,14 +332,14 @@ For detailed status across Flutter versions, see the [official Flutter team spre
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
-class GradientFlowDemo extends StatefulWidget {
-  const GradientFlowDemo({super.key});
+class CustomPainterDemo extends StatefulWidget {
+  const CustomPainterDemo({super.key});
 
   @override
-  State<GradientFlowDemo> createState() => _GradientFlowDemoState();
+  State<CustomPainterDemo> createState() => _CustomPainterDemoState();
 }
 
-class _GradientFlowDemoState extends State<GradientFlowDemo> 
+class _CustomPainterDemoState extends State<CustomPainterDemo>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   ui.FragmentShader? _shader;
@@ -360,7 +356,8 @@ class _GradientFlowDemoState extends State<GradientFlowDemo>
 
   Future<void> _loadShader() async {
     final program = await ui.FragmentProgram.fromAsset(
-        'assets/shaders/gradient_flow.frag');
+      'assets/shaders/gradient_flow.frag',
+    );
     setState(() {
       _shader = program.fragmentShader();
     });
@@ -370,17 +367,22 @@ class _GradientFlowDemoState extends State<GradientFlowDemo>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: _shader == null
-          ? const Center(child: CircularProgressIndicator())
-          : AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                return CustomPaint(
-                  painter: GradientFlowPainter(_shader!, _controller.value),
-                  size: Size.infinite,
-                );
-              },
-            ),
+      body: Center(
+        child: _shader == null
+            ? const CircularProgressIndicator(color: Colors.white)
+            : AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  return CustomPaint(
+                    painter: ShaderPainter(_shader!, _controller.value),
+                    size: Size(
+                      MediaQuery.of(context).size.width,
+                      MediaQuery.of(context).size.height,
+                    ),
+                  );
+                },
+              ),
+      ),
     );
   }
 
@@ -391,17 +393,17 @@ class _GradientFlowDemoState extends State<GradientFlowDemo>
   }
 }
 
-class GradientFlowPainter extends CustomPainter {
+class ShaderPainter extends CustomPainter {
   final ui.FragmentShader shader;
   final double time;
 
-  GradientFlowPainter(this.shader, this.time);
+  ShaderPainter(this.shader, this.time);
 
   @override
   void paint(Canvas canvas, Size size) {
-    shader.setFloat(0, size.width);   // iResolution.x
-    shader.setFloat(1, size.height);  // iResolution.y
-    shader.setFloat(2, time * 2);     // iTime
+    shader.setFloat(0, size.width);
+    shader.setFloat(1, size.height);
+    shader.setFloat(2, time * 2);
 
     final paint = Paint()..shader = shader;
     canvas.drawRect(Offset.zero & size, paint);
@@ -430,14 +432,14 @@ dependencies:
 import 'package:flutter/material.dart';
 import 'package:flutter_shaders/flutter_shaders.dart';
 
-class StripesPatternDemo extends StatefulWidget {
-  const StripesPatternDemo({super.key});
+class FlutterShadersDemo extends StatefulWidget {
+  const FlutterShadersDemo({super.key});
 
   @override
-  State<StripesPatternDemo> createState() => _StripesPatternDemoState();
+  State<FlutterShadersDemo> createState() => _FlutterShadersDemoState();
 }
 
-class _StripesPatternDemoState extends State<StripesPatternDemo>
+class _FlutterShadersDemoState extends State<FlutterShadersDemo>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
@@ -454,37 +456,49 @@ class _StripesPatternDemoState extends State<StripesPatternDemo>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: ShaderBuilder(
-        assetKey: 'assets/shaders/stripes_pattern.frag',
-        (context, shader, child) {
-          return AnimatedBuilder(
-            animation: _controller,
-            builder: (context, _) {
-              return AnimatedSampler(
-                (image, size, canvas) {
-                  shader.setFloat(0, size.width);
-                  shader.setFloat(1, size.height);
-                  shader.setFloat(2, _controller.value * 4.0);
-                  
-                  final paint = Paint()..shader = shader;
-                  canvas.drawRect(Offset.zero & size, paint);
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.purple, Colors.blue, Colors.green],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+      body: ShaderBuilder(assetKey: 'assets/shaders/stripes_pattern.frag', (
+        context,
+        shader,
+        child,
+      ) {
+        return AnimatedBuilder(
+          animation: _controller,
+          builder: (context, _) {
+            return AnimatedSampler(
+              (image, size, canvas) {
+                shader.setFloat(0, size.width);
+                shader.setFloat(1, size.height);
+                shader.setFloat(2, _controller.value * 4.0);
+
+                final paint = Paint()..shader = shader;
+                canvas.drawRect(Offset.zero & size, paint);
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.purple, Colors.blue, Colors.green],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Flutter Shaders\nAnimated Demo',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
                   ),
                 ),
-              );
-            },
-          );
-        },
-      ),
+              ),
+            );
+          },
+        );
+      }),
     );
   }
 
@@ -508,14 +522,14 @@ class _StripesPatternDemoState extends State<StripesPatternDemo>
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
-class RippleImageFilterDemo extends StatefulWidget {
-  const RippleImageFilterDemo({super.key});
+class ImageFilterDemo extends StatefulWidget {
+  const ImageFilterDemo({super.key});
 
   @override
-  State<RippleImageFilterDemo> createState() => _RippleImageFilterDemoState();
+  State<ImageFilterDemo> createState() => _ImageFilterDemoState();
 }
 
-class _RippleImageFilterDemoState extends State<RippleImageFilterDemo>
+class _ImageFilterDemoState extends State<ImageFilterDemo>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   ui.FragmentShader? _shader;
@@ -532,7 +546,8 @@ class _RippleImageFilterDemoState extends State<RippleImageFilterDemo>
 
   Future<void> _loadShader() async {
     final program = await ui.FragmentProgram.fromAsset(
-        'assets/shaders/ripple_effect.frag');
+      'assets/shaders/ripple_effect.frag',
+    );
     setState(() {
       _shader = program.fragmentShader();
     });
@@ -543,7 +558,7 @@ class _RippleImageFilterDemoState extends State<RippleImageFilterDemo>
     if (_shader == null) {
       return const Scaffold(
         backgroundColor: Colors.black,
-        body: Center(child: CircularProgressIndicator()),
+        body: Center(child: CircularProgressIndicator(color: Colors.white)),
       );
     }
 
@@ -553,7 +568,7 @@ class _RippleImageFilterDemoState extends State<RippleImageFilterDemo>
         animation: _controller,
         builder: (context, child) {
           _shader!.setFloat(0, MediaQuery.of(context).size.width);
-          _shader!.setFloat(1, MediaQuery.of(context).size.height);  
+          _shader!.setFloat(1, MediaQuery.of(context).size.height);
           _shader!.setFloat(2, _controller.value * 2);
 
           return ImageFiltered(
@@ -611,14 +626,14 @@ class _RippleImageFilterDemoState extends State<RippleImageFilterDemo>
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
-class RippleBackdropDemo extends StatefulWidget {
-  const RippleBackdropDemo({super.key});
+class BackdropFilterDemo extends StatefulWidget {
+  const BackdropFilterDemo({super.key});
 
   @override
-  State<RippleBackdropDemo> createState() => _RippleBackdropDemoState();
+  State<BackdropFilterDemo> createState() => _BackdropFilterDemoState();
 }
 
-class _RippleBackdropDemoState extends State<RippleBackdropDemo>
+class _BackdropFilterDemoState extends State<BackdropFilterDemo>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   ui.FragmentShader? _shader;
@@ -635,7 +650,8 @@ class _RippleBackdropDemoState extends State<RippleBackdropDemo>
 
   Future<void> _loadShader() async {
     final program = await ui.FragmentProgram.fromAsset(
-        'assets/shaders/ripple_effect.frag');
+      'assets/shaders/ripple_effect.frag',
+    );
     setState(() {
       _shader = program.fragmentShader();
     });
@@ -647,7 +663,6 @@ class _RippleBackdropDemoState extends State<RippleBackdropDemo>
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          // Background - Grid of Flutter logos
           Container(
             color: Colors.white,
             child: GridView.builder(
@@ -673,8 +688,7 @@ class _RippleBackdropDemoState extends State<RippleBackdropDemo>
               },
             ),
           ),
-          
-          // Shader backdrop effect
+
           if (_shader != null)
             Center(
               child: ClipRRect(
