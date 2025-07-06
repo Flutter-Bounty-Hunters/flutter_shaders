@@ -324,70 +324,26 @@ High-level view of the frame lifecycle:
 
 For detailed status across Flutter versions, see the [official Flutter team spreadsheet](https://docs.google.com/spreadsheets/d/1AebMvprRkxP-D6ndx920lbvDBbhg-sNNRJ64XY2P2t0/edit?gid=0#gid=0).
 
-### Method 1: Using flutter_shaders Package (Recommended)
 
-For easier shader management, you can use the flutter_shaders package:
+## Example 1: CustomPainter + FragmentShader
 
-#### Add Dependency
+**Creates visual effects from scratch using the GPU**
 
-```yaml
-dependencies:
-  flutter:
-    sdk: flutter
-  flutter_shaders: 
-```
+![Gradient Flow Effect](getting-started/gradient_flow.gif)
 
-#### Simplified Code
-
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_shaders/flutter_shaders.dart';
-
-class ShaderDemo extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ShaderBuilder(
-      assetKey: 'assets/shaders/animated_colors.frag',
-      (context, shader, child) {
-        return AnimatedSampler(
-          (image, size, canvas) {
-            shader.setFloat(0, size.width);
-            shader.setFloat(1, size.height);
-            shader.setFloat(2, DateTime.now().millisecondsSinceEpoch / 500.0);
-            
-            final paint = Paint()..shader = shader;
-            canvas.drawRect(Offset.zero & size, paint);
-          },
-          child: Container(
-            width: 300,
-            height: 300,
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-```
-
-### Method 2: Using ImageFilter.shader with ImageFiltered
-
-Apply custom shaders to any widget using ImageFilter.shader. **Note**: This requires Impeller renderer.
-
+### Dart Code:
 ```dart
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
-class ImageFilterShaderDemo extends StatefulWidget {
+class GradientFlowDemo extends StatefulWidget {
+  const GradientFlowDemo({super.key});
+
   @override
-  State<ImageFilterShaderDemo> createState() => _ImageFilterShaderDemoState();
+  State<GradientFlowDemo> createState() => _GradientFlowDemoState();
 }
 
-class _ImageFilterShaderDemoState extends State<ImageFilterShaderDemo>
+class _GradientFlowDemoState extends State<GradientFlowDemo> 
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   ui.FragmentShader? _shader;
@@ -404,7 +360,179 @@ class _ImageFilterShaderDemoState extends State<ImageFilterShaderDemo>
 
   Future<void> _loadShader() async {
     final program = await ui.FragmentProgram.fromAsset(
-        'assets/shaders/animated_colors.frag');
+        'assets/shaders/gradient_flow.frag');
+    setState(() {
+      _shader = program.fragmentShader();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: _shader == null
+          ? const Center(child: CircularProgressIndicator())
+          : AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return CustomPaint(
+                  painter: GradientFlowPainter(_shader!, _controller.value),
+                  size: Size.infinite,
+                );
+              },
+            ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+}
+
+class GradientFlowPainter extends CustomPainter {
+  final ui.FragmentShader shader;
+  final double time;
+
+  GradientFlowPainter(this.shader, this.time);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    shader.setFloat(0, size.width);   // iResolution.x
+    shader.setFloat(1, size.height);  // iResolution.y
+    shader.setFloat(2, time * 2);     // iTime
+
+    final paint = Paint()..shader = shader;
+    canvas.drawRect(Offset.zero & size, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+```
+
+
+## Example 2: flutter_shaders Package
+
+**Simplified shader usage with automatic texture management**
+
+![Stripes Pattern Effect](getting-started/stripes.gif)
+
+First add the dependency:
+```yaml
+dependencies:
+  flutter_shaders: ^0.1.3
+```
+
+### Dart Code:
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_shaders/flutter_shaders.dart';
+
+class StripesPatternDemo extends StatefulWidget {
+  const StripesPatternDemo({super.key});
+
+  @override
+  State<StripesPatternDemo> createState() => _StripesPatternDemoState();
+}
+
+class _StripesPatternDemoState extends State<StripesPatternDemo>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    )..repeat();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: ShaderBuilder(
+        assetKey: 'assets/shaders/stripes_pattern.frag',
+        (context, shader, child) {
+          return AnimatedBuilder(
+            animation: _controller,
+            builder: (context, _) {
+              return AnimatedSampler(
+                (image, size, canvas) {
+                  shader.setFloat(0, size.width);
+                  shader.setFloat(1, size.height);
+                  shader.setFloat(2, _controller.value * 4.0);
+                  
+                  final paint = Paint()..shader = shader;
+                  canvas.drawRect(Offset.zero & size, paint);
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.purple, Colors.blue, Colors.green],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+}
+```
+
+
+## Example 3: ImageFilter.shader
+
+**Apply shader effects to any widget** (Requires Impeller)
+
+![Ripple Effect](getting-started/ripple_effect.gif)
+
+### Dart Code:
+```dart
+import 'dart:ui' as ui;
+import 'package:flutter/material.dart';
+
+class RippleImageFilterDemo extends StatefulWidget {
+  const RippleImageFilterDemo({super.key});
+
+  @override
+  State<RippleImageFilterDemo> createState() => _RippleImageFilterDemoState();
+}
+
+class _RippleImageFilterDemoState extends State<RippleImageFilterDemo>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  ui.FragmentShader? _shader;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    )..repeat();
+    _loadShader();
+  }
+
+  Future<void> _loadShader() async {
+    final program = await ui.FragmentProgram.fromAsset(
+        'assets/shaders/ripple_effect.frag');
     setState(() {
       _shader = program.fragmentShader();
     });
@@ -413,40 +541,53 @@ class _ImageFilterShaderDemoState extends State<ImageFilterShaderDemo>
   @override
   Widget build(BuildContext context) {
     if (_shader == null) {
-      return const Center(child: CircularProgressIndicator());
+      return const Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(child: CircularProgressIndicator()),
+      );
     }
 
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        // Update shader uniforms
-        _shader!.setFloat(0, 300); // width
-        _shader!.setFloat(1, 300); // height  
-        _shader!.setFloat(2, _controller.value * 2); // time
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          _shader!.setFloat(0, MediaQuery.of(context).size.width);
+          _shader!.setFloat(1, MediaQuery.of(context).size.height);  
+          _shader!.setFloat(2, _controller.value * 2);
 
-        return ImageFiltered(
-          imageFilter: ui.ImageFilter.shader(_shader!),
-          child: Container(
-            width: 300,
-            height: 300,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.grey),
-            ),
-            child: const Center(
-              child: Text(
-                'Shader Effect\nApplied to Widget',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+          return ImageFiltered(
+            imageFilter: ui.ImageFilter.shader(_shader!),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              color: Colors.white,
+              child: GridView.builder(
+                padding: const EdgeInsets.all(40),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 5,
+                  mainAxisSpacing: 30,
+                  crossAxisSpacing: 30,
                 ),
+                itemCount: 25,
+                itemBuilder: (context, index) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade100,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Icon(
+                      Icons.flutter_dash,
+                      size: 80,
+                      color: Colors.blue,
+                    ),
+                  );
+                },
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
@@ -459,20 +600,25 @@ class _ImageFilterShaderDemoState extends State<ImageFilterShaderDemo>
 ```
 
 
-### Method 3: Using BackdropFilter with ImageFilter.shader
+## Example 4: BackdropFilter
 
-Apply custom shader effects to background content. **Note**: This also requires Impeller renderer.
+**Apply shader effects to background content** (Requires Impeller)
 
+![Backdrop Effect](getting-started/backdrop_effect.gif)
+
+### Dart Code:
 ```dart
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
-class BackdropShaderDemo extends StatefulWidget {
+class RippleBackdropDemo extends StatefulWidget {
+  const RippleBackdropDemo({super.key});
+
   @override
-  State<BackdropShaderDemo> createState() => _BackdropShaderDemoState();
+  State<RippleBackdropDemo> createState() => _RippleBackdropDemoState();
 }
 
-class _BackdropShaderDemoState extends State<BackdropShaderDemo>
+class _RippleBackdropDemoState extends State<RippleBackdropDemo>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   ui.FragmentShader? _shader;
@@ -489,7 +635,7 @@ class _BackdropShaderDemoState extends State<BackdropShaderDemo>
 
   Future<void> _loadShader() async {
     final program = await ui.FragmentProgram.fromAsset(
-        'assets/shaders/animated_colors.frag');
+        'assets/shaders/ripple_effect.frag');
     setState(() {
       _shader = program.fragmentShader();
     });
@@ -497,71 +643,80 @@ class _BackdropShaderDemoState extends State<BackdropShaderDemo>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // Background content
-        Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.red, Colors.blue, Colors.green],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-          child: const Center(
-            child: Text(
-              'Background Content',
-              style: TextStyle(
-                fontSize: 24,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Stack(
+        children: [
+          // Background - Grid of Flutter logos
+          Container(
+            color: Colors.white,
+            child: GridView.builder(
+              padding: const EdgeInsets.all(20),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 6,
+                mainAxisSpacing: 20,
+                crossAxisSpacing: 20,
               ),
+              itemCount: 36,
+              itemBuilder: (context, index) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade100,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(
+                    Icons.flutter_dash,
+                    size: 60,
+                    color: Colors.blue,
+                  ),
+                );
+              },
             ),
           ),
-        ),
-        
-        // Shader backdrop effect
-        if (_shader != null)
-          Center(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: AnimatedBuilder(
-                animation: _controller,
-                builder: (context, child) {
-                  // Update shader uniforms
-                  _shader!.setFloat(0, 300); // width
-                  _shader!.setFloat(1, 200); // height
-                  _shader!.setFloat(2, _controller.value * 2); // time
+          
+          // Shader backdrop effect
+          if (_shader != null)
+            Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, child) {
+                    _shader!.setFloat(0, 400);
+                    _shader!.setFloat(1, 300);
+                    _shader!.setFloat(2, _controller.value * 2);
 
-                  return BackdropFilter(
-                    filter: ui.ImageFilter.shader(_shader!),
-                    child: Container(
-                      width: 300,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.3),
+                    return BackdropFilter(
+                      filter: ui.ImageFilter.shader(_shader!),
+                      child: Container(
+                        width: 400,
+                        height: 300,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.3),
+                            width: 2,
+                          ),
                         ),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Shader Backdrop Effect',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                        child: const Center(
+                          child: Text(
+                            'Shader Backdrop Effect',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -573,27 +728,6 @@ class _BackdropShaderDemoState extends State<BackdropShaderDemo>
 }
 ```
 
-**Important Note**: BackdropFilter is the primary way to apply shaders to background layers in Flutter. It uses Flutter's built-in backdrop layer system that captures and processes content behind widgets. While flutter_shaders can achieve similar visual effects in some cases through snapshot-based approaches, BackdropFilter's integration with the rendering pipeline makes it the most reliable and agnostic way of applying shaders to background content.
-
-
-## Understanding Shader Uniforms
-
-Uniforms are parameters you can pass from Dart to your shader:
-
-```glsl
-uniform vec2 iResolution;     // Screen size
-uniform vec2 iMouse;          // Mouse/touch position  
-uniform float iTime;          // Animation time
-uniform sampler2D iChannel0;  // Texture input
-```
-
-Set them in Dart:
-
-```dart
-shader.setFloat(0, value);           // Single float
-shader.setFloat(1, x); shader.setFloat(2, y); // Vec2
-shader.setImageSampler(0, image);    // Texture
-```
 
 ## Integrating Shaders from FlutterShaders.com
 
@@ -605,46 +739,3 @@ To use a shader from this website:
 4. **Identify the uniforms** the shader expects
 5. **Create a CustomPainter** similar to the example above
 6. **Set the required uniforms** in the `paint` method
-
-### Example: Water Ripple Effect
-
-```dart
-class RipplePainter extends CustomPainter {
-  final ui.FragmentShader shader;
-  final Offset touchPosition;
-  final double time;
-  final ui.Image? backgroundImage;
-
-  RipplePainter(
-      this.shader, this.touchPosition, this.time, this.backgroundImage);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    shader.setFloat(0, size.width);
-    shader.setFloat(1, size.height);
-    shader.setFloat(2, touchPosition.dx);
-    shader.setFloat(3, touchPosition.dy);
-    shader.setFloat(4, time);
-
-    if (backgroundImage != null) {
-      shader.setImageSampler(0, backgroundImage!);
-    } else {
-      // Create a simple gradient fallback
-      final gradient = ui.Gradient.linear(
-        Offset.zero,
-        Offset(size.width, size.height),
-        [Colors.blue, Colors.purple],
-      );
-      final paint = Paint()..shader = gradient;
-      canvas.drawRect(Offset.zero & size, paint);
-      return;
-    }
-
-    final paint = Paint()..shader = shader;
-    canvas.drawRect(Offset.zero & size, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
-}
-```
