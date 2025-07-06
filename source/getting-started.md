@@ -312,6 +312,17 @@ High-level view of the frame lifecycle:
     *   Broader compatibility across different Flutter rendering backends (Skia and Impeller).
     *   Complex effects requiring fine-grained control over all shader uniforms (for example size unifrom).
 
+## Impeller Status by Platform
+
+**ImageFilter.shader** requires Impeller. Check platform availability:
+
+- **iOS**: Impeller default (Flutter 3.29+)
+- **Android**: Impeller default (API 29+), falls back to OpenGL on older versions
+- **macOS**: Impeller behind flag
+- **Windows/Linux**: Impeller experimental
+- **Web**: Uses Skia (no Impeller yet)
+
+For detailed status across Flutter versions, see the [official Flutter team spreadsheet](https://docs.google.com/spreadsheets/d/1AebMvprRkxP-D6ndx920lbvDBbhg-sNNRJ64XY2P2t0/edit?gid=0#gid=0).
 
 ### Method 1: Using flutter_shaders Package (Recommended)
 
