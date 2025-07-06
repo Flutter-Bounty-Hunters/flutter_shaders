@@ -1,6 +1,8 @@
 ---
 title: Getting Started with Flutter Shaders
 description: Learn how to create stunning visual effects and performant graphics directly in your Flutter applications with this comprehensive guide.
+layout: layouts/content_page.jinja
+directory: getting-started/
 ---
 
 # Getting Started with Flutter Shaders
@@ -218,7 +220,7 @@ flutter run
 
 You should see a colorful animated shader effect!
 
-![Animated Colors Effect](getting-started/animated_colors.gif)
+![Animated Colors Effect](animated_colors.gif)
 
 ## Different Approaches to Using Shaders in Flutter
 
@@ -275,11 +277,11 @@ A critical difference between these approaches lies in **when and how many times
 
 You'll notice in the timeline that this process doesn't trigger any additional raster operations beyond what's standard for a frame (compared to the below example).
 
-![ImageFilter starts during build phase](getting-started/using_image_filter_starts_during_build_phase.png)
+![ImageFilter starts during build phase](using_image_filter_starts_during_build_phase.png)
 
 High-level view of the frame lifecycle:
 
-![ImageFilter does not trigger raster operation](getting-started/using_image_filter_starts_during_build_phase_and_does_not_trigger_raster_operation.png)
+![ImageFilter does not trigger raster operation](using_image_filter_starts_during_build_phase_and_does_not_trigger_raster_operation.png)
 
 **flutter_shaders** (Third-party Package):
 - Starts during the **compositing phase** using `AnimatedSampler` to capture widget subtrees
@@ -288,11 +290,11 @@ High-level view of the frame lifecycle:
 
 The timeline shows this extra raster work initiated by the package.
 
-![flutter_shaders starts during compositing phase](getting-started/using_flutter_shaders_starts_during_compositing_phase.png)
+![flutter_shaders starts during compositing phase](using_flutter_shaders_starts_during_compositing_phase.png)
 
 High-level view of the frame lifecycle:
 
-![flutter_shaders triggers raster operation](getting-started/using_flutter_shaders_starts_during_compositing_phase_and_does_trigger_raster_operation.png)
+![flutter_shaders triggers raster operation](using_flutter_shaders_starts_during_compositing_phase_and_does_trigger_raster_operation.png)
 
 
 
@@ -325,7 +327,7 @@ For detailed status across Flutter versions, see the [official Flutter team spre
 
 **Creates visual effects from scratch using the GPU**
 
-![Gradient Flow Effect](getting-started/gradient_flow.gif)
+![Gradient Flow Effect](gradient_flow.gif)
 
 ### Dart Code:
 ```dart
@@ -419,7 +421,7 @@ class ShaderPainter extends CustomPainter {
 
 **Simplified shader usage with automatic texture management**
 
-![Stripes Pattern Effect](getting-started/stripes.gif)
+![Stripes Pattern Effect](stripes.gif)
 
 First add the dependency:
 ```yaml
@@ -515,7 +517,7 @@ class _FlutterShadersDemoState extends State<FlutterShadersDemo>
 
 **Apply shader effects to any widget** (Requires Impeller)
 
-![Ripple Effect](getting-started/ripple_effect.gif)
+![Ripple Effect](ripple_effect.gif)
 
 ### Dart Code:
 ```dart
@@ -619,7 +621,7 @@ class _ImageFilterDemoState extends State<ImageFilterDemo>
 
 **Apply shader effects to background content** (Requires Impeller)
 
-![Backdrop Effect](getting-started/backdrop_effect.gif)
+![Backdrop Effect](backdrop_effect.gif)
 
 ### Dart Code:
 ```dart

@@ -10,6 +10,7 @@ Future<void> main(List<String> arguments) async {
     ..pick(DirectoryPicker.parse("images"))
     ..pick(ExtensionPicker("mp4"))
     ..pick(ExtensionPicker("png"))
+    ..pick(ExtensionPicker("gif"))
     // All 3rd party behavior is added through plugins, even the behavior
     // shipped with Static Shock.
     ..plugin(const MarkdownPlugin())
