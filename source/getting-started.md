@@ -267,17 +267,50 @@ You should see a colorful animated shader effect!
 *   **API Flexibility**: Provides more direct control over the `FragmentShader` object. You have full responsibility for declaring and managing all uniforms, which offers maximum flexibility and power at the cost of potentially more boilerplate code.
 *   **Dependencies**: Requires adding the `flutter_shaders` package to your `pubspec.yaml`.
 
+### Rendering Pipeline Performance Impact
+
+A critical difference between these approaches lies in **when and how many times rendering occurs** during the Flutter frame lifecycle:
+
+**ImageFilter.shader** (Native Flutter API):
+- Starts during the **build phase** and integrates directly with Flutter's compositing layer
+- Processes in **single-pass rendering** within the normal pipeline
+- **Does not trigger additional raster operations** beyond the standard frame rendering
+
+
+You'll notice in the timeline that this process doesn't trigger any additional raster operations beyond what's standard for a frame (compared to the below example).
+
+![ImageFilter starts during build phase](getting-started/using_image_filter_starts_during_build_phase.png)
+
+High-level view of the frame lifecycle:
+
+![ImageFilter does not trigger raster operation](getting-started/using_image_filter_starts_during_build_phase_and_does_not_trigger_raster_operation.png)
+
+**flutter_shaders** (Third-party Package):
+- Starts during the **compositing phase** using `AnimatedSampler` to capture widget subtrees
+- Requires **2 raster frames per UI frame** due to texture capture overhead via `toImageSync()`
+- **Triggers additional raster operations** for texture creation and shader application
+
+The timeline shows this extra raster work initiated by the package.
+
+![flutter_shaders starts during compositing phase](getting-started/using_flutter_shaders_starts_during_compositing_phase.png)
+
+High-level view of the frame lifecycle:
+
+![flutter_shaders triggers raster operation](getting-started/using_flutter_shaders_starts_during_compositing_phase_and_does_trigger_raster_operation.png)
+
+
+
 ### When to use which?
 
-*   Use **ImageFilter.shader** when you:
-    *   Need to apply shader effects as a `BackdropFilter`.
-    *   Are targeting platforms where Impeller is guaranteed.
-    *   Want to avoid external dependencies.
+*   Use **ImageFilter.shader** for:
+    *   Applying shader effects as a BackdropFilter.
+    *   Projects where you can rely on the Impeller rendering engine.
+    *   Avoiding third-party dependencies.
+    *   Optimal performance with single-pass rendering.
 
-*   Use the **flutter_shaders** package when you:
-    *   Need a solution that works across different rendering backends.
-    *   Require fine-grained control over all shader uniforms for complex or unconventional effects.
-    *   Are creating effects that don't require `BackdropFilter`.
+*   Use the **flutter_shaders** package for:
+    *   Broader compatibility across different Flutter rendering backends (Skia and Impeller).
+    *   Complex effects requiring fine-grained control over all shader uniforms (for example size unifrom).
 
 
 ### Method 1: Using flutter_shaders Package (Recommended)
@@ -601,3 +634,4 @@ class RipplePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
+```
