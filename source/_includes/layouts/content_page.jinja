@@ -1,0 +1,82 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  {{ components.google_analytics() }}
+
+  <meta charset="utf-8">
+  <title>{{ title }} | Flutter Shaders</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  {{ components.favicon() }}
+
+  <!-- Open Graph Social Media -->
+  <meta property="og:url" content="{{ homepage_url }}{{ url }}" />
+  <meta property="og:title" content="{{ title }} | Flutter Shaders" />
+  <meta property="og:description" content="{{ description }}" />
+  <meta property="og:image" content="{{ homepage_url }}/images/branding/social.png" />
+  <meta property="og:type" content="website" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@SuprDeclarative" />
+  <meta name="twitter:url" content="{{ homepage_url }}{{ url }}" />
+  <meta name="twitter:title" content="{{ title }} | Flutter Shaders" />
+  <meta name="twitter:description" content="{{ description }}" />
+  <meta name="twitter:image" content="{{ homepage_url }}/images/branding/social.png" />
+
+  <link href="/styles/tailwind.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/obsidian.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/glsl.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <style>
+    /* Custom styles for content page images */
+    .prose img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      margin: 1.5rem auto;
+      display: block;
+    }
+    
+    /* Ensure GIFs and large images fit properly */
+    .prose img[src*=".gif"] {
+      max-width: min(100%, 600px);
+    }
+    
+    /* PNG diagrams can be larger */
+    .prose img[src*=".png"] {
+      max-width: min(100%, 800px);
+    }
+    
+    /* Better spacing around images */
+    .prose p:has(img) {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body class="bg-[#27b6d6]">
+  <header class="py-[64px] flex flex-col justify-center items-center bg-[#FFFFFF] text-[#444444]">
+    <div class="absolute top-0 left-0 w-full h-[48px] flex justify-center items-center">
+      <a href="/" class="text-[#444444] text-sm font-bold uppercase">Flutter Shaders</a>
+    </div>
+
+    <h1 class="text-4xl font-bold uppercase text-center max-w-[800px] px-4">{{ title }}</h1>
+    <p class="mt-4 text-lg text-center max-w-[600px] px-4">{{ description }}</p>
+  </header>
+
+  <main class="ml-[auto] mr-[auto] max-w-[1000px] py-[72px] px-[48px] text-[#FFFFFFBB]">
+    <div class="prose prose-invert prose-lg max-w-none prose-headings:text-white prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h4:text-lg prose-strong:text-white prose-code:text-blue-300 prose-pre:bg-gray-800">
+      {{ content }}
+    </div>
+  </main>
+</body>
+</html>
