@@ -1,29 +1,42 @@
 ---
 title: Getting Started with Flutter Shaders
-description: Learn how to create stunning visual effects and performant graphics directly in your Flutter applications with this comprehensive guide.
+description: Learn how to create stunning visual effects and performant graphics directly in your 
+    Flutter applications with this comprehensive guide.
 layout: layouts/content_page.jinja
 directory: getting-started/
 ---
 
 # Getting Started with Flutter Shaders
+Shaders in Flutter allow you to create stunning visual effects and performant graphics directly in 
+your Flutter applications. This guide will take you from basic concepts to implementing real shader 
+effects in your apps.
 
-Shaders in Flutter allow you to create stunning visual effects and performant graphics directly in your Flutter applications. This guide will take you from basic concepts to implementing real shader effects in your apps.
+## Integrating Shaders from FlutterShaders.com
+TL;DR: To use a shader from this website:
+
+1. **Copy the shader code** from the shader page
+2. **Save it** as a `.frag` file in `assets/shaders/`
+3. **Add it to your pubspec.yaml** under `flutter: shaders:`
+4. **Identify the uniforms** the shader expects
+5. **Create a CustomPainter** similar to the example above
+6. **Set the required uniforms** in the `paint` method
 
 ## What Are Fragment Shaders?
-
-Fragment shaders are small GPU programs that determine the color of each pixel on the screen. Think of them as functions that run in parallel for every pixel, where:
+Fragment shaders are small GPU programs that determine the color of each pixel on the screen. Think 
+of them as functions that run in parallel for every pixel, where:
 
 - **Input**: The pixel's position (coordinates) and custom parameters called uniforms
 - **Output**: A single color value for that pixel
 
-**NOTE**: Shaders run on the GPU, making them incredibly fast. Fragment shaders are typically the final step in the graphics pipeline, which is why they're so efficient for real-time effects.
+**NOTE**: Shaders run on the GPU, making them incredibly fast. Fragment shaders are typically the 
+final step in the graphics pipeline, which is why they're so efficient for real-time effects.
 
 ## Flutter + Fragment Shaders
-
-Flutter is hardware-accelerated, meaning it leverages GPU shaders for rendering. Every widget you see - from a simple `Container` to complex blur effects - is ultimately rendered using optimized shaders. This is what makes Flutter so smooth and performant across platforms.
+Flutter is hardware-accelerated, meaning it leverages GPU shaders for rendering. Every widget you 
+see - from a simple `Container` to complex blur effects - is ultimately rendered using optimized 
+shaders. This is what makes Flutter so smooth and performant across platforms.
 
 ## Types of Shader Usage in Flutter
-
 There are three main ways to use custom shaders in Flutter:
 
 ### 1. Paint from Scratch
@@ -46,7 +59,6 @@ Modify content behind widgets:
 
 
 ## Step-by-Step Setup
-
 Follow these steps to create your first Flutter shader project:
 
 #### Step 1: Create a New Flutter Project
@@ -63,7 +75,6 @@ mkdir -p assets/shaders
 ```
 
 #### Step 3: Create Your First Shader File
-
 Create a file `assets/shaders/animated_colors.frag` with the following content:
 
 ```glsl
@@ -92,7 +103,6 @@ void main() {
 ```
 
 #### Step 4: Register the Shader in pubspec.yaml
-
 Add the shader to your `pubspec.yaml` file:
 
 ```yaml
@@ -234,12 +244,14 @@ You should see a colorful animated shader effect!
 #### 2. ImageFiltered + ImageFilter.shader
 - **Use Case**: Apply shader effects to child widgets
 - **Pros**: Easy to apply shader effects to any widget
-- **Cons**: Requires Impeller renderer; cannot control the first two uniforms (vec2 for texture size and sampler2D) as they are set by the Flutter engine
+- **Cons**: Requires Impeller renderer; cannot control the first two uniforms (vec2 for texture 
+size and sampler2D) as they are set by the Flutter engine
 
 #### 3. BackdropFilter + ImageFilter.shader
 - **Use Case**: Apply shader effects to background content
 - **Pros**: Easy backdrop shader effects
-- **Cons**: Requires Impeller renderer;cannot control the first two uniforms (vec2 for texture size and sampler2D) as they are set by the Flutter engine
+- **Cons**: Requires Impeller renderer;cannot control the first two uniforms (vec2 for texture 
+size and sampler2D) as they are set by the Flutter engine
 
 #### 4. flutter_shaders Package
 - **Use Case**: Simplified shader usage - easily transform any widget into a shader-compatible image
@@ -252,30 +264,38 @@ You should see a colorful animated shader effect!
 **ImageFilter.shader** (Native Flutter API):
 
 *   **Integration**: Built directly into the Flutter framework (`dart:ui`).
-*   **Rendering Backend**: **Requires the Impeller rendering engine.** It will not work with other backends.
-*   **BackdropFilter**: **Supports `BackdropFilter`**, allowing you to apply shader effects to the content behind a widget.
-*   **API Flexibility**: Operates on a "convention over configuration" model. It simplifies the process by automatically providing and managing core uniforms (like the input texture), but this reduces flexibility as you have less control over the shader's direct inputs.
+*   **Rendering Backend**: **Requires the Impeller rendering engine.** It will not work with other 
+backends.
+*   **BackdropFilter**: **Supports `BackdropFilter`**, allowing you to apply shader effects to the 
+content behind a widget.
+*   **API Flexibility**: Operates on a "convention over configuration" model. It simplifies the 
+process by automatically providing and managing core uniforms (like the input texture), but this 
+reduces flexibility as you have less control over the shader's direct inputs.
 *   **Dependencies**: None, as it's part of the Flutter SDK.
 
 **flutter_shaders** (Third-party Package):
 
 *   **Integration**: A community-created package that needs to be added as a dependency.
-*   **Rendering Backend**: **Backend-agnostic**, making it compatible with various rendering backends, not just Impeller.
-*   **BackdropFilter**: **Does not directly support `BackdropFilter`**. Its effects are generally limited to the widgets it's applied to.
-*   **API Flexibility**: Provides more direct control over the `FragmentShader` object. You have full responsibility for declaring and managing all uniforms, which offers maximum flexibility and power at the cost of potentially more boilerplate code.
+*   **Rendering Backend**: **Backend-agnostic**, making it compatible with various rendering 
+backends, not just Impeller.
+*   **BackdropFilter**: **Does not directly support `BackdropFilter`**. Its effects are generally 
+limited to the widgets it's applied to.
+*   **API Flexibility**: Provides more direct control over the `FragmentShader` object. You have 
+full responsibility for declaring and managing all uniforms, which offers maximum flexibility and
+power at the cost of potentially more boilerplate code.
 *   **Dependencies**: Requires adding the `flutter_shaders` package to your `pubspec.yaml`.
 
 ### Rendering Pipeline Performance Impact
-
-A critical difference between these approaches lies in **when and how many times rendering occurs** during the Flutter frame lifecycle:
+A critical difference between these approaches lies in **when and how many times rendering occurs** 
+during the Flutter frame lifecycle:
 
 **ImageFilter.shader** (Native Flutter API):
 - Starts during the **build phase** and integrates directly with Flutter's compositing layer
 - Processes in **single-pass rendering** within the normal pipeline
 - **Does not trigger additional raster operations** beyond the standard frame rendering
 
-
-You'll notice in the timeline that this process doesn't trigger any additional raster operations beyond what's standard for a frame (compared to the below example).
+You'll notice in the timeline that this process doesn't trigger any additional raster operations 
+beyond what's standard for a frame (compared to the below example).
 
 ![ImageFilter starts during build phase](using_image_filter_starts_during_build_phase.png)
 
@@ -296,22 +316,18 @@ High-level view of the frame lifecycle:
 
 ![flutter_shaders triggers raster operation](using_flutter_shaders_starts_during_compositing_phase_and_does_trigger_raster_operation.png)
 
-
-
 ### When to use which?
-
 *   Use **ImageFilter.shader** for:
     *   Applying shader effects as a BackdropFilter.
     *   Projects where you can rely on the Impeller rendering engine.
     *   Avoiding third-party dependencies.
     *   Optimal performance with single-pass rendering.
-
 *   Use the **flutter_shaders** package for:
     *   Broader compatibility across different Flutter rendering backends (Skia and Impeller).
-    *   Complex effects requiring fine-grained control over all shader uniforms (for example size unifrom).
+    *   Complex effects requiring fine-grained control over all shader uniforms (for example size 
+unifrom).
 
 ## Impeller Status by Platform
-
 **ImageFilter.shader** requires Impeller. Check platform availability:
 
 - **iOS**: Impeller default (Flutter 3.29+)
@@ -324,7 +340,6 @@ For detailed status across Flutter versions, see the [official Flutter team spre
 
 
 ## Example 1: CustomPainter + FragmentShader
-
 **Creates visual effects from scratch using the GPU**
 
 ![Gradient Flow Effect](gradient_flow.gif)
@@ -418,7 +433,6 @@ class ShaderPainter extends CustomPainter {
 
 
 ## Example 2: flutter_shaders Package
-
 **Simplified shader usage with automatic texture management**
 
 ![Stripes Pattern Effect](stripes.gif)
@@ -514,7 +528,6 @@ class _FlutterShadersDemoState extends State<FlutterShadersDemo>
 
 
 ## Example 3: ImageFilter.shader
-
 **Apply shader effects to any widget** (Requires Impeller)
 
 ![Ripple Effect](ripple_effect.gif)
@@ -616,9 +629,7 @@ class _ImageFilterDemoState extends State<ImageFilterDemo>
 }
 ```
 
-
 ## Example 4: BackdropFilter
-
 **Apply shader effects to background content** (Requires Impeller)
 
 ![Backdrop Effect](backdrop_effect.gif)
@@ -743,15 +754,3 @@ class _BackdropFilterDemoState extends State<BackdropFilterDemo>
   }
 }
 ```
-
-
-## Integrating Shaders from FlutterShaders.com
-
-To use a shader from this website:
-
-1. **Copy the shader code** from the shader page
-2. **Save it** as a `.frag` file in `assets/shaders/`
-3. **Add it to your pubspec.yaml** under `flutter: shaders:`
-4. **Identify the uniforms** the shader expects
-5. **Create a CustomPainter** similar to the example above
-6. **Set the required uniforms** in the `paint` method

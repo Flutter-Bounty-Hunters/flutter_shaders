@@ -25,6 +25,7 @@
   <meta name="twitter:description" content="{{ description }}" />
   <meta name="twitter:image" content="{{ homepage_url }}/images/branding/social.png" />
 
+  <link href="/styles/content_page.css" rel="stylesheet">
   <link href="/styles/tailwind.css" rel="stylesheet">
 
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/obsidian.min.css">
@@ -74,7 +75,7 @@
   </header>
 
   <main class="ml-[auto] mr-[auto] max-w-[1000px] py-[72px] px-[48px] text-[#FFFFFFBB]">
-    <div class="prose prose-invert prose-lg max-w-none prose-headings:text-white prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h4:text-lg prose-strong:text-white prose-code:text-blue-300 prose-pre:bg-gray-800">
+    <div class="content max-w-none">
       {{ content }}
     </div>
   </main>
