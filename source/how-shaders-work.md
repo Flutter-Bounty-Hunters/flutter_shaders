@@ -2,7 +2,7 @@
 title: How Shaders Work in Flutter
 description: Understand the core concepts of fragment shaders, how they integrate with Flutter, and the different rendering approaches available.
 layout: layouts/content_page.jinja
-directory: getting-started/
+directory: how-shaders-work/
 ---
 
 # How Shaders Work in Flutter
@@ -21,6 +21,9 @@ Flutter is hardware-accelerated, meaning it leverages GPU shaders for rendering.
 
 ## Types of Shader Usage in Flutter
 There are three main ways to use custom shaders in Flutter:
+
+![Types of Shader Usage in Flutter](usage_examples.png)
+
 
 ### 1. Paint from Scratch
 Create visual effects directly without any underlying content:
@@ -41,8 +44,6 @@ Modify content behind widgets:
 - Background distortions
 
 ## Different Approaches to Using Shaders in Flutter
-
-### Available Shader Approaches
 
 #### 1. CustomPainter + FragmentShader
 - **Use Case**: Paint from scratch using the GPU
@@ -106,11 +107,11 @@ High-level view of the frame lifecycle:
 
 The timeline shows this extra raster work initiated by the package.
 
-![flutter_shaders starts during compositing phase](/getting-started/using_flutter_shaders_starts_during_compositing_phase.png)
+![flutter_shaders starts during compositing phase](using_flutter_shaders_starts_during_compositing_phase.png)
 
 High-level view of the frame lifecycle:
 
-![flutter_shaders triggers raster operation](/getting-started/using_flutter_shaders_starts_during_compositing_phase_and_does_trigger_raster_operation.png)
+![flutter_shaders triggers raster operation](using_flutter_shaders_starts_during_compositing_phase_and_does_trigger_raster_operation.png)
 
 ### When to use which?
 *   Use **ImageFilter.shader** for:
@@ -132,3 +133,4 @@ High-level view of the frame lifecycle:
 - **Web**: Uses Skia (no Impeller yet)
 
 For detailed status across Flutter versions, see the [official Flutter team spreadsheet](https://docs.google.com/spreadsheets/d/1AebMvprRkxP-D6ndx920lbvDBbhg-sNNRJ64XY2P2t0/edit?gid=0#gid=0).
+
