@@ -7,6 +7,7 @@ directory: getting-started/
 ---
 
 # Getting Started with Flutter Shaders
+
 Shaders in Flutter allow you to create stunning visual effects and performant graphics directly in 
 your Flutter applications. This guide will take you from basic concepts to implementing real shader 
 effects in your apps.
@@ -195,8 +196,14 @@ You should see a colorful animated shader effect!
 
 ![Animated Colors Effect](animated_colors.gif)
 
+Now that you've successfully created your first shader effect, let's explore the different ways you can use shaders in a Flutter app. The following examples demonstrate various techniques, from using `CustomPainter` for drawing effects from scratch to applying shaders to existing widgets with `ImageFilter`.
+
+For a deeper dive into the technical differences between these approaches and to understand when to use each one, be sure to read our guide on [How Shaders Work](/how-shaders-work/).
+
+Let's look at the examples.
+
 ## Example 1: CustomPainter + FragmentShader
-**Creates visual effects from scratch using the GPU**
+**Creates visual effects from scratch**
 
 ![Gradient Flow Effect](gradient_flow.gif)
 
@@ -289,7 +296,7 @@ class ShaderPainter extends CustomPainter {
 
 
 ## Example 2: flutter_shaders Package
-**Simplified shader usage with automatic texture management**
+**Simplified shader usage with ShaderBuilder**
 
 ![Stripes Pattern Effect](stripes.gif)
 
