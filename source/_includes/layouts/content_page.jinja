@@ -29,12 +29,21 @@
   <link href="/styles/tailwind.css" rel="stylesheet">
 
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/obsidian.min.css">
+
+  
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dart.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/glsl.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
   <script>hljs.highlightAll();</script>
+
+  <style>
+    pre {
+      background: transparent !important;
+      padding: 0 !important;
+    }
+  </style>
 
   <style>
     /* Custom styles for content page images */
@@ -64,18 +73,15 @@
   </style>
 </head>
 
-<body class="bg-[#27b6d6]">
-  <header class="py-[64px] flex flex-col justify-center items-center bg-[#FFFFFF] text-[#444444]">
-    <div class="absolute top-0 left-0 w-full h-[48px] flex justify-center items-center">
-      <a href="/" class="text-[#444444] text-sm font-bold uppercase">Flutter Shaders</a>
-    </div>
-
-    <h1 class="text-4xl font-bold uppercase text-center max-w-[800px] px-4">{{ title }}</h1>
-    <p class="mt-4 text-lg text-center max-w-[600px] px-4">{{ description }}</p>
+<body class="bg-gray-900 text-gray-100">
+  <header class="py-16 bg-gray-800 text-center">
+    <a href="/" class="text-blue-400 hover:text-blue-300 font-semibold">&larr; Back to Home</a>
+    <h1 class="mt-4 text-5xl font-extrabold tracking-tight text-white">{{ title }}</h1>
+    <p class="mt-4 text-xl text-gray-300 max-w-2xl mx-auto">{{ description }}</p>
   </header>
 
-  <main class="ml-[auto] mr-[auto] max-w-[1000px] py-[72px] px-[48px] text-[#FFFFFFBB]">
-    <div class="content max-w-none">
+  <main class="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="prose prose-invert prose-lg max-w-none prose-p:leading-relaxed prose-p:mb-8 prose-headings:mt-16 prose-headings:mb-4">
       {{ content }}
     </div>
   </main>

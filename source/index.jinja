@@ -34,12 +34,12 @@ description: An inventory of shaders for Flutter developers to explore.
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   </head>
 
-  <body class="bg-[#27b6d6]">
-    <header class="pt-[64px] pb-[128px] md:py-[128px] flex flex-col justify-center items-center bg-[#FFFFFF] text-[#444444]">
+  <body class="bg-gray-900 text-gray-100">
+    <header class="pt-[64px] pb-[128px] md:py-[128px] flex flex-col justify-center items-center bg-gray-800 text-gray-100">
       <div class="max-w-[800px] block md:flex md:flex-row items-center">
         <div class="md:flex-1 pl-[64px] pr-[64px] pb-[48px] md:pb-0">
           <h1 class="mb-[8px] text-5xl font-bold uppercase">Flutter Shaders</h1>
-          <p class="mb-[24px] text-3xl text-[#27b6d6] font-bold">Shaders for every user, on every platform</p>
+          <p class="mb-[24px] text-3xl text-blue-400 font-bold">Shaders for every user, on every platform</p>
           <img src="/images/platform-icons.png" class="max-w-[275px]">
         </div>
         <div class="mx-[auto] md:ml-[48px] w-[250px] h-[250px]">
@@ -48,16 +48,16 @@ description: An inventory of shaders for Flutter developers to explore.
       </div>
 
       <div class="mt-[72px] flex flex-col md:flex-row gap-6 text-center">
-        <a href="/getting-started" class="text-[#444444] font-bold uppercase no-underline">Getting Started Guide</a>
-        <a href="/how-shaders-work" class="text-[#444444] font-bold uppercase no-underline">Learn how shaders work</a>
+        <a href="/getting-started" class="text-gray-100 font-bold uppercase no-underline">Getting Started Guide</a>
+        <a href="/how-shaders-work" class="text-gray-100 font-bold uppercase no-underline">Learn how shaders work</a>
       </div>
     </header>
-    <main class="py-[96px] text-[#FFFFFFAA]">
+    <main class="py-[96px] text-gray-300">
       <div class="max-w-[800px] ml-[auto] mr-[auto] mb-[128px]">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[48px]">
           {% for page in pages.byTag("shader") %}
           <a href="{{ page.data["url"] }}" class="no-underline">
-            <div class="p-[8px] border border-[#FFFFFF10] hover:border-[#FFFFFF33] hover:bg-[#FFFFFF04] rounded-lg">
+            <div class="p-[8px] border border-gray-700 hover:border-gray-600 hover:bg-gray-800 rounded-lg">
               <img
                 src="{{ page.data["directory"] }}{{ page.data["shader"]["screenshot"] }}"
                 class="w-full ml-[auto] mr-[auto] max-w-[250px] rounded-md"
@@ -69,7 +69,7 @@ description: An inventory of shaders for Flutter developers to explore.
         </div>
       </div>
 
-      <h2 class="text-center font-bold uppercase text-xl text-[#FFFFFF]">Contributors</h2>
+      <h2 class="text-center font-bold uppercase text-xl text-white">Contributors</h2>
       <ol class="mt-[32px] mb-[128px] flex flex-row justify-center list-none text-center">
         {% set contributors = github["flutter-bounty-hunters"].flutter_shaders %}
         {% set contributorCount = 15 %}
@@ -86,7 +86,7 @@ description: An inventory of shaders for Flutter developers to explore.
 
         {% if contributors|length > contributorCount %}
         <li class="inline-block">
-          <div class="inline-block w-[64px] h-[64px] rounded-full bg-[rgba(255, 255, 255, 0.05)] leading-[64px] text-center align-[middle]">
+          <div class="inline-block w-[64px] h-[64px] rounded-full bg-gray-800 leading-[64px] text-center align-[middle]">
             +{{  contributors|length - contributorCount  }}
           </div>
         </li>
@@ -100,8 +100,8 @@ description: An inventory of shaders for Flutter developers to explore.
             title="matthew-carroll"
             class="inline-block w-[64px] h-[64px] rounded-full bg-cover bg-no-repeat bg-center"
             style="background-image: url('https://avatars.githubusercontent.com/u/7259036?v=4');"></a>
-        <p class="mt-[8px] mb-[24px] text-sm">Made with ❤️ by <a href="https://superdeclarative.com" target="_blank" class="text-[#FFFF00]">SuperDeclarative!</a></p>
-        <a href="https://github.com/sponsors/matthew-carroll" target="_blank" class="px-[12px] py-[8px] bg-sky-600 hover:bg-sky-400 rounded-lg text-[#FFFFFFDD] hover:text-[#FFFFFFFF] no-underline text-sm"><i class="fa-brands fa-github"></i> Sponsor on GitHub</a>
+        <p class="mt-[8px] mb-[24px] text-sm">Made with ❤️ by <a href="https://superdeclarative.com" target="_blank" class="text-yellow-400">SuperDeclarative!</a></p>
+        <a href="https://github.com/sponsors/matthew-carroll" target="_blank" class="px-[12px] py-[8px] bg-sky-600 hover:bg-sky-400 rounded-lg text-gray-200 hover:text-white no-underline text-sm"><i class="fa-brands fa-github"></i> Sponsor on GitHub</a>
       </div>
     </main>
   </body>
