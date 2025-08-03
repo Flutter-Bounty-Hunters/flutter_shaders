@@ -32,19 +32,26 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dart.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/glsl.min.js"></script>
   <script>hljs.highlightAll();</script>
+
+  <style>
+    pre {
+      background: transparent !important;
+      padding: 0 !important;
+    }
+  </style>
 </head>
 
-<body class="bg-[#27b6d6]">
-  <header class="py-[128px] flex flex-col justify-center items-center bg-[#FFFFFF] text-[#444444]">
+<body class="bg-gray-900 text-gray-100">
+  <header class="py-[128px] flex flex-col justify-center items-center bg-gray-800 text-gray-100">
     <div class="absolute top-0 left-0 w-full h-[48px] flex justify-center items-center">
-      <a href="/" class="text-[#444444] text-sm font-bold uppercase">Flutter Shaders</a>
+      <a href="/" class="text-gray-100 text-sm font-bold uppercase">Flutter Shaders</a>
     </div>
 
-    <img src="{{ shader.screenshot }}" class="max-w-[400px]">
+    <img src="{{ shader.screenshot }}" class="max-w-[400px] rounded-lg">
     <h1 class="mt-8 text-4xl font-bold uppercase">{{ shader.title }}</h1>
   </header>
 
-  <main class="ml-[auto] mr-[auto] max-w-[800px] py-[72px] px-[48px] flex flex-col items-center text-[#FFFFFFBB]">
+  <main class="ml-[auto] mr-[auto] max-w-[800px] py-[72px] px-[48px] flex flex-col items-center text-gray-300">
     <p class="mb-[72px] max-w-[500px] text-2xl font-bold text-center">{{ shader.description }}</p>
 
     <video width="500" height="400" autoplay loop muted class="rounded-md">
@@ -53,7 +60,7 @@
 
     <p class="mt-[24px] mb-[72px] max-w-[500px]">Use the code below to add this shader to a Flutter app. If you’re not sure what to do with the provided code, check out our <a href="/usage-guide">usage guide</a>, or learn <a href="/how-shaders-work">how shaders works</a>.</p>
 
-    <div id="shaderCode" class="w-[100%]">
+    <div id="shaderCode" class="w-[100%] prose prose-invert">
     {{ content }}
     </div>
   </main>
